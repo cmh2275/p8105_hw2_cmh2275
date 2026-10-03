@@ -1,0 +1,10 @@
+---
+title: "p8015_hw2_cmh2275"
+author: "cmh2275"
+date: "2026-10-03"
+output: github_document
+---
+
+# Problem 1 
+
+
