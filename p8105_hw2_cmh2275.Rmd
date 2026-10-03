@@ -12,7 +12,7 @@ library(tidyverse)
 
 options(tibble.pring_min = 5)
 
-transit_df = read_csv (file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data",
+transit_df = read_csv (file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv",
                        na=c("NA",".","")) |>
 janitor::clean_names()|>
 
