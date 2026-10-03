@@ -7,4 +7,23 @@ output: github_document
 
 # Problem 1 
 
+```{r}
+library(tidyverse)
+
+options(tibble.pring_min = 5)
+
+transit_df = read_csv (file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data",
+                       na=c("NA",".","")) |>
+janitor::clean_names()|>
+
+select(transit_df,line, station, name, station_latitude, station_longitude,route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entrance, ada) |>
+  
+mutate (transit_df, entry = 
+          case_match(
+            entry, 
+            "YES" ~ "TRUE",
+            "NO" ~ "FALSE"),
+          )
+  
+```
 
