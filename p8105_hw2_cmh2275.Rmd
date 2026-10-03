@@ -27,10 +27,10 @@ transit_df =
 
 ## select columns and change variable
 ```{r}
-transit_df = select(transit_df, line, station_name, station_latitude, station_longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entrance_type, entry, ada)
+transit_df = select(transit_df, line, station_name, station_latitude, station_longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entrance_type, entry, ada) 
   
-mutate (transit_df, entry = 
-          case_match(
+transit_df = mutate (transit_df, 
+    entry = case_match(
           entry, 
             "YES" ~ TRUE,
             "NO" ~ FALSE))
