@@ -7,6 +7,8 @@ output: github_document
 
 # Problem 1 
 
+## import data
+
 ```{r}
 library(tidyverse)
 
@@ -16,23 +18,21 @@ transit_df = read_csv (file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.
                        na=c("NA",".",""))
 
 ```
-
+## clean names
 ```{r}
 transit_df = 
   janitor::clean_names(transit_df)
 
 ```
 
-
+## select columns and change variable
 ```{r}
-transit_df = select(transit_df, line, station_name, station_latitude, station_longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entrance_type, entry, ada) |>
+transit_df = select(transit_df, line, station_name, station_latitude, station_longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entrance_type, entry, ada)
   
 mutate (transit_df, entry = 
           case_match(
             entry, 
             "YES" ~ "TRUE",
             "NO" ~ "FALSE"))
-
-print (transit_df)
 ```
 
