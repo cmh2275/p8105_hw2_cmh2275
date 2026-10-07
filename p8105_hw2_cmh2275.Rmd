@@ -136,11 +136,20 @@ This dataset was imported and then variable names were updated. Sex and Apoe4 va
 There were `r nrow(mcibase_df)` participants recruited, and of them, `r mcibase_df|>
 filter(!is.na(age_at_onset))|> nrow()` were diagnosed with MCI. 
 
+The average age at baseline was `r mcibase_df |> 
+summarise(round(mean(current_age, na.rm = TRUE), digits = 2))` years. 
 
+The proportion of women in the study who are APOE4 carrriers is `r mcibase_df |> filter (sex == "female") |> summarise(round(mean(apoe4 == "carrier", na.rm = TRUE), digits = 2))`.
 
 
 ## add biomarker data
 
+```{r}
+mciamy_df = read_csv("./data/mci_amyloid.csv", skip = 1, na=c(".", "NA", "Na"))|>
+  janitor::clean_names() |>
+  rename (id = study_id)
+```
+The data was imported, specifying missing values to maintain numeric variables, and names were cleaned. The study id variable name was changed from study_id to id to be consistent across study datasets. The data includes 487 observations and, in additon to study id, 5 timepoint variables: baseline, time 2, time 4, time 6, and time 8. 
 
 ```
 
