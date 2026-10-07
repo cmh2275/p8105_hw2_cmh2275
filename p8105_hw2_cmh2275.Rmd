@@ -116,3 +116,17 @@ filter(vessel == "prof")|>
 summarise(total_sum = sum(weight_tons, na.rm = TRUE))` tons. 
 The total number of cigarette buts collected by Gwynnda in June of 2022 was `r fulltrash_df |> filter(vessel == "gwyn", year == "2022", month == "June") |> summarise( total_sum = as.integer(sum(cigarette_butts, na.rm = TRUE)))`. 
 
+# Problem 3 
+
+##import, clean & tidy
+```{r}
+library(tidyverse)
+mcibase_df = read_csv("./data/MCI_baseline.csv", skip = 1, na=c("."))|>
+  janitor::clean_names()|>
+  mutate (
+    sex = factor(sex, levels = c(1,0), labels = c("male", "female")),
+    apoe4 = factor(apoe4, levels = c(1,0), labels = c("carrier", "noncarrier"))
+          )|>
+  drop_na(age_at_onset)
+```
+
