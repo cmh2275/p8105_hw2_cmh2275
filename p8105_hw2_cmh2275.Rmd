@@ -110,10 +110,12 @@ fulltrash_df = bind_rows(mrtrash_df, proftrash_df, gwynnda_df)
 ```
 
 ## Dataset information 
-This data set includes `r nrow(fulltrash_df)`. It contains the following variables: `r colnames(fulltrash_df)`. These variables describe the trash collected by each trash vessel across the years. 
+This data set includes `r nrow(fulltrash_df)` observations. It contains the following variables: `r colnames(fulltrash_df)`. These variables describe the trash collected by each trash vessel across the years. 
+
 The total weight of trash collected by Professor Trash Wheel was `r fulltrash_df |> 
 filter(vessel == "prof")|>
 summarise(total_sum = sum(weight_tons, na.rm = TRUE))` tons. 
+
 The total number of cigarette buts collected by Gwynnda in June of 2022 was `r fulltrash_df |> filter(vessel == "gwyn", year == "2022", month == "June") |> summarise( total_sum = as.integer(sum(cigarette_butts, na.rm = TRUE)))`. 
 
 # Problem 3 
@@ -123,21 +125,23 @@ The total number of cigarette buts collected by Gwynnda in June of 2022 was `r f
 library(tidyverse)
 mcibase_df = read_csv("./data/MCI_baseline.csv", skip = 1, na=c("."))|>
   janitor::clean_names()|>
+  rename (baseline_age = current_age)|>
   mutate (
     sex = factor(sex, levels = c(1,0), labels = c("male", "female")),
     apoe4 = factor(apoe4, levels = c(1,0), labels = c("carrier", "noncarrier"))
           )|>
- filter(age_at_onset>current_age |is.na(age_at_onset))
+ filter(age_at_onset>baseline_age |is.na(age_at_onset))
 ```
 
 ## Dataset Information 
 
-This dataset was imported and then variable names were updated. Sex and Apoe4 variables were changed to factors and finally the dataset was filtered to remove any participants who had MCI diagnosis at baseline. Thus, the final dataset only includes those who met inlcusion criteria for the study. It includes four variables: age at baseline (current_age), sex of participant (sex), years of education (education), apoe4 status (apoe4; carrier/noncarrier), and MCI age onset (age_at_onset), and has 479 observations. 
+This dataset was imported and variable names were updated. Sex and Apoe4 variables were changed to factors and finally the dataset was filtered to remove any participants who had MCI diagnosis at baseline. Thus, the final dataset only includes those who met inlcusion criteria for the study. It includes four main variables: age at baseline, sex of participant, years of education, apoe4 status (carrier/noncarrier), and MCI age onset, with the following variable names: `r colnames(mcibase_df)` and has `r nrow(mcibase_df)` observations. 
+
 There were `r nrow(mcibase_df)` participants recruited, and of them, `r mcibase_df|>
 filter(!is.na(age_at_onset))|> nrow()` were diagnosed with MCI. 
 
 The average age at baseline was `r mcibase_df |> 
-summarise(round(mean(current_age, na.rm = TRUE), digits = 2))` years. 
+summarise(round(mean(baseline_age, na.rm = TRUE), digits = 2))` years. 
 
 The proportion of women in the study who are APOE4 carrriers is `r mcibase_df |> filter (sex == "female") |> summarise(round(mean(apoe4 == "carrier", na.rm = TRUE), digits = 2))`.
 
@@ -147,9 +151,16 @@ The proportion of women in the study who are APOE4 carrriers is `r mcibase_df |>
 ```{r}
 mciamy_df = read_csv("./data/mci_amyloid.csv", skip = 1, na=c(".", "NA", "Na"))|>
   janitor::clean_names() |>
-  rename (id = study_id)
+  rename (id = study_id, amyratio_base = baseline, amyratio_time_2 = time_2, amyratio_time_4 = time_4, amyratio_time_6 = time_6, amyratio_time_8 = time_8)
 ```
-The data was imported, specifying missing values to maintain numeric variables, and names were cleaned. The study id variable name was changed from study_id to id to be consistent across study datasets. The data includes 487 observations and, in additon to study id, 5 timepoint variables: baseline, time 2, time 4, time 6, and time 8. 
+The data was imported, specifying missing values to maintain numeric variables, and names were cleaned. The study id variable name was changed from study_id to id to be consistent across study datasets, and other variable names were changed to better reflect content. The data includes `r nrow(mciamy_df)` observations and, in additon to study id, 5 variables that report the amyloid beta 42/40  ratio across 5 timepoints for the following variables: `r colnames(mciamy_df)`. 
 
+The amyloid dataset has `r nrow(mciamy_df)`observations while the baseline dataset only has `r nrow(mcibase_df)` observations, indicating there are participants that only appear in one dataset (the amyloid dataset).
+
+## join datasets
+```{r}
+mcifull_df = left_join(mcibase_df, mciamy_df, by = "id")
+write_csv (mcifull_df, "hw2_mci_joined.csv")
 ```
 
+The combined dataset contains only participants who met inclusion criteria for the study; participants who had MCI at baseline were excluded. It includes baseline demographics of age at baseline, sex, years of education, apoe4 carrier status and measures of amyloid beta 42/40 ratios across five timepoints for the following variables `r colnames(mcifull_df)`, and has a total of `r nrow(mcifull_df)` participants (observations). 
