@@ -161,7 +161,8 @@ The amyloid dataset has `r nrow(mciamy_df)`observations while the baseline datas
 
 ## join datasets
 ```{r}
-mcifull_df = left_join(mcibase_df, mciamy_df, by = "id")
+mcifull_df = left_join(mcibase_df, mciamy_df, by = "id")|>
+  remove_rownames()
 
 write_csv (mcifull_df, "hw2_mci_joined.csv")
 ```

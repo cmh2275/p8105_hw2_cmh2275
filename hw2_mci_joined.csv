@@ -1,4 +1,4 @@
-id,baseline_age,sex,education,apoe4,age_at_onset,amyratio_base,amyratio_time_2,amyratio_time_4,amyratio_time_6,amyratio_time_8
+id,current_age,sex,education,apoe4,age_at_onset,amyratio_base,amyratio_time_2,amyratio_time_4,amyratio_time_6,amyratio_time_8
 1,63.1,female,16,carrier,NA,0.1105487,NA,0.109325197,0.104756131,0.107257697
 2,65.6,female,20,carrier,NA,0.107481183,0.109157373,0.109457839,0.105729713,0.10661845
 3,62.5,male,16,carrier,66.8,0.106087034,0.108744509,0.106065035,NA,0.106152357
