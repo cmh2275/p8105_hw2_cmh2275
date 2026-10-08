@@ -126,7 +126,6 @@ library(tidyverse)
 mcibase_df = read_csv("./data/MCI_baseline.csv", skip = 1, na=c("."))|>
   janitor::clean_names()|>
   rename (baseline_age = current_age)|>
-  remove_rownames()|>
   mutate (
     sex = factor(sex, levels = c(1,0), labels = c("male", "female")),
     apoe4 = factor(apoe4, levels = c(1,0), labels = c("carrier", "noncarrier"))
@@ -152,7 +151,6 @@ The proportion of women in the study who are APOE4 carrriers is `r mcibase_df |>
 ```{r}
 mciamy_df = read_csv("./data/mci_amyloid.csv", skip = 1, na=c(".", "NA", "Na"))|>
   janitor::clean_names() |>
-  remove_rownames() |>
   rename (id = study_id, amyratio_base = baseline, amyratio_time_2 = time_2, amyratio_time_4 = time_4, amyratio_time_6 = time_6, amyratio_time_8 = time_8)
 ```
 The data was imported, specifying missing values to maintain numeric variables, and names were cleaned. The study id variable name was changed from study_id to id to be consistent across study datasets, and other variable names were changed to better reflect content. The data includes `r nrow(mciamy_df)` observations and, in additon to study id, 5 variables that report the amyloid beta 42/40  ratio across 5 timepoints for the following variables: `r colnames(mciamy_df)`. 
@@ -161,8 +159,7 @@ The amyloid dataset has `r nrow(mciamy_df)`observations while the baseline datas
 
 ## join datasets
 ```{r}
-mcifull_df = left_join(mcibase_df, mciamy_df, by = "id")|>
-  remove_rownames()
+mcifull_df = left_join(mcibase_df, mciamy_df, by = "id")
 
 write_csv (mcifull_df, "hw2_mci_joined.csv")
 ```
